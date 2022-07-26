@@ -83,20 +83,20 @@ function App() {
         <div className='scores-container'>
             <div className='first-score-wrapper'>
                 <Table
+                    {...tableProps}
                     onRow={(_, rowIndex) => onRow(rowIndex, firstTeam)}
                     title={_renderDefaultTitle(FIRST_TEAM)}
                     dataSource={firstTeam}
-                    {...tableProps}
                 >
                 </Table>
             </div>
 
             <div className='second-score-wrapper'>
                 <Table
+                    {...tableProps}
                     onRow={(_, rowIndex) => onRow(rowIndex, secondTeam)}
                     title={_renderDefaultTitle(SECOND_TEAM)}
                     dataSource={secondTeam}
-                    {...tableProps}
                 />
             </div>
         </div>
