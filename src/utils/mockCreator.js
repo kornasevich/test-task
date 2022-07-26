@@ -3,9 +3,9 @@ import {
     STATES,
     MAX_INDEX_STATES,
     MAX_AMOUNT_KILLS,
-    MAX_AMOUNT_DEATHS,
-    MAX_INDEX_TEAM
+    MAX_AMOUNT_DEATHS
 } from "../constants/user";
+import {MAX_INDEX_TEAM} from "../constants/team";
 
 const calcRandomNumber = (maxNumber) => Math.round(Math.random() * maxNumber);
 
@@ -25,11 +25,11 @@ export function getMockPlayers(amountUsers = 100) {
     return players
 }
 
-export function getMockWinnerTeam () {
+export function getMockWinnerTeam() {
     return calcRandomNumber(MAX_INDEX_TEAM)
 }
 
-export function getMockPostBattleScreenDetails () {
+export function getMockPostBattleScreenDetails() {
     return {
         winnerTeam: getMockWinnerTeam(),
         players: getMockPlayers()

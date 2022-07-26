@@ -1,13 +1,14 @@
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {Table} from "antd";
 
 import {columns} from "./constants/post-battle-screen-config";
 import api from "./api/index.api";
-import {TEAMS} from "./constants/user";
+import {TEAMS, STATE_TEAM} from "./constants/team";
 
 import './styles.css'
 
 const {FIRST_TEAM, SECOND_TEAM} = TEAMS;
+const {WINNER, LOSER} = STATE_TEAM;
 
 function App() {
     const [firstTeam, setFirstTeam] = useState([])
@@ -44,13 +45,24 @@ function App() {
             })
     }, [])
 
-    const sendRequestToFriend = ({id}) => {
+    const sendRequestToFriend = useCallback(({id}) => {
         api.player.sendRequestToFriend(id).then(() => {
             setRequestFriendList([...requestFriendList, id])
         }).catch(() => {
             console.log('something went wrong')
         })
-    }
+    }, [requestFriendList])
+
+    const memoizedColumns = useMemo(() =>
+            columns({
+                tooltipText: `kills: ${tooltipData?.kills}, deaths: ${tooltipData?.deaths}`,
+                sendRequestToFriend,
+                requestFriendList
+            }),
+        [tooltipData, requestFriendList, sendRequestToFriend]
+    )
+
+    const _renderDefaultTitle = (TEAM) => winnerTeam === TEAM ? () => WINNER : () => LOSER
 
     const onRow = (rowIndex, team) => {
         return {
@@ -59,17 +71,6 @@ function App() {
             }
         };
     }
-
-    const memoizedColumns = useMemo(() =>
-            columns({
-                tooltipText: `kills: ${tooltipData?.kills}, deaths: ${tooltipData?.deaths}`,
-                sendRequestToFriend,
-                requestFriendList
-            }),
-        [tooltipData, requestFriendList]
-    )
-
-    const _renderDefaultTitle = (TEAM) => winnerTeam === TEAM ? () => 'Winner' : () => 'Loser'
 
     const tableProps = {
         pagination: false,
