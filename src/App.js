@@ -4,6 +4,7 @@ import {Table} from "antd";
 import {columns} from "./constants/post-battle-screen-config";
 import api from "./api/index.api";
 import {TEAMS, STATE_TEAM} from "./constants/team";
+import separationPlayersByTeams from "./utils/separationPlayers";
 
 import './styles.css'
 
@@ -28,15 +29,7 @@ function App() {
             .getDetails()
             .then(({winnerTeam, players}) => {
                 setWinnerTeam(winnerTeam)
-                const first = []
-                const second = []
-                players.forEach((player) => {
-                    if (player.team === FIRST_TEAM) {
-                        first.push({...player, key: player.id})
-                    } else {
-                        second.push({...player, key: player.id})
-                    }
-                })
+                const [first, second] = separationPlayersByTeams(players, (player) => player.team === FIRST_TEAM)
                 setFirstTeam(first)
                 setSecondTeam(second)
             })
@@ -46,8 +39,8 @@ function App() {
     }, [])
 
     const sendRequestToFriend = useCallback(({id}) => {
-        api.player.sendRequestToFriend(id).then(() => {
-            setRequestFriendList([...requestFriendList, id])
+        api.player.sendRequestToFriend(id).then(({playerId}) => {
+            setRequestFriendList([...requestFriendList, playerId])
         }).catch(() => {
             console.log('something went wrong')
         })

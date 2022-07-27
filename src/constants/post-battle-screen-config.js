@@ -7,12 +7,12 @@ const _renderTooltip = (tooltipText) => (nickname) => (
     </Tooltip>
 )
 
-const _renderAction = ({sendRequestToFriend, requestFriendList}) => (_, record) => {
-    const isRequestSend = requestFriendList.includes(record.id)
-    return isRequestSend ? <CheckOutlined/> :
-        <div onClick={() => sendRequestToFriend(record)} style={{cursor: 'pointer'}}>
+const _renderAction = ({sendRequestToFriend, requestFriendList}) => (_, row) => {
+    const isRequestSent = requestFriendList.includes(row.id)
+    return isRequestSent ? <CheckOutlined/> :
+        <button onClick={() => sendRequestToFriend(row)} style={{cursor: 'pointer'}}>
             <UserAddOutlined/>
-        </div>
+        </button>
 }
 
 export const columns = ({tooltipText, sendRequestToFriend, requestFriendList}) => [
